@@ -4,10 +4,46 @@
   "main": "index.ts",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon index.ts"
+    "generate:prod": "graphql-codegen --config codegen.yml",
+    "generate:dev": "graphql-codegen --config codegen.dev.yml",
+    "compile": "yarn generate:dev && tsc",
+    "start": "node .dist/apps/server/index.js",
+    "dev": "nodemon index.ts & yarn generate:dev",
+    "seed": "ts-node src/seed.ts",
+    "prebuild": "yarn run generate:prod",
+    "build": "tsc",
+    "postbuild": "ncp ./src/schema.graphql ./dist/src/schema.graphql"
   },
   "dependencies": {
+    "@apollo/server": "^4.9.2",
+    "@fistbump/fistbump-types": "*",
+    "@types/cors": "^2.8.13",
     "@types/express": "^4.17.17",
-    "express": "^4.18.2"
+    "@types/mongoose": "^5.11.97",
+    "@types/node": "^20.5.7",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "fs": "^0.0.1-security",
+    "graphql": "^16.8.0",
+    "graphql-scalars": "^1.22.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^7.4.3"
+  },
+  "mdSeed": {
+    "seedersFolder": "./seeders"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.0.2",
+    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/client-preset": "^4.1.0",
+    "@graphql-codegen/typescript": "^4.0.1",
+    "@graphql-codegen/typescript-resolvers": "^4.0.1",
+    "@parcel/watcher": "^2.3.0",
+    "@types/jsonwebtoken": "^9.0.2",
+    "babel-eslint": "^10.1.0",
+    "ncp": "^2.0.0",
+    "nodemon": "^3.0.1",
+    "typescript": "^5.2.2"
   }
 }

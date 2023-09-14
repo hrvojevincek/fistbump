@@ -1,0 +1,126 @@
+scalar Date
+
+type Query {
+  hello: String
+  getUsers: [User]
+  getUser(id: String): User
+  getUserByName(fullName: String): User
+  login(email: String, password: String): Token
+  getReport(targetId: String!, cycleId: String): Report
+  getCurrentCycle: Cycle
+  getAssignedReviews(cycleId: String, reviewerId: String): [Report]
+  getAllReports: [Report]
+}
+
+type Mutation {
+  createUser(input: UserInput): User
+  updateUser(input: UserInput): User
+  updateReport(targetId: String!, cycleId: String, input: ReportInput): Report
+  updateAssignedReview(targetId: String!, input: ReviewInput!): Report
+}
+
+type Token {
+  token: String
+  id: String
+}
+
+input UserInput {
+  email: String!
+  fullName: String
+  hashedPw: String
+  title: String
+  isAdmin: Boolean
+  photo: String
+  teamName: String
+  companyName: String
+}
+
+input ReportInput {
+  _id: ReportIdInput
+  summary: String
+  status: String
+  reviews: ReviewsInput
+}
+
+input ReviewsInput {
+  self: ReviewInput
+  peer: ReviewInput
+  manager: ReviewInput
+}
+
+input ReviewInput {
+  reviewerId: String
+  isDeclined: Boolean
+  submitted: Boolean
+  grades: [GradeInput]
+}
+
+input GradeInput {
+  metric: String
+  rating: Int
+  maxRating: Int
+  comment: String
+}
+
+input ReportIdInput {
+  targetId: String
+  cycleId: String
+}
+
+type User {
+  _id: String
+  email: String
+  fullName: String
+  hashedPw: String
+  title: String
+  isAdmin: Boolean
+  photo: String
+  teamName: String
+  companyName: String
+}
+
+type ReportID {
+  targetId: String
+  cycleId: String
+}
+
+type Report {
+  _id: ReportID
+  summary: String
+  status: String
+  reviews: Reviews
+  target: User
+  submitted: Boolean
+}
+
+type Reviews {
+  self: Review
+  peers: [Review]
+  manager: Review
+}
+
+type Review {
+  reviewerId: String
+  isDeclined: Boolean
+  submitted: Boolean
+  grades: [Grade]
+  _id: String
+}
+
+type Grade {
+  metric: String
+  rating: Int
+  maxRating: Int
+  comment: String
+}
+
+type Cycle {
+  _id: String
+  title: String
+  startDate: Date
+  endDate: Date
+  peersPerTarget: Int
+  nominationDeadline: Date
+  reviewDeadline: Date
+  reportDeadline: Date
+}
